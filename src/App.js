@@ -11,36 +11,56 @@ class App extends React.Component {
       gameScore: 0,
       molePosition: {},
       gameTick: 2000,
+      gameTickLvlUp: 1000,
       nextLevel: false,
       endOfGame: false,
     };
   };
 
   componentDidMount = () => {
-    this.timerID = setInterval(
+    this.startGame();
+  }
+
+  startGame = () => {
+    this.timerID = setTimeout(
+      () => this.stopGame(),
+      120000
+    );
+    this.tickID = setInterval(
       () => this.gameInterval(),
       this.state.gameTick
     );
   };
 
   componentWillUnmount = () => {
-    clearInterval(this.timerID);
+    clearInterval(this.tickID);
   };
 
   startNextInterval = () => {
-    // for (var i = 1; i < 99999; i++) {
-    //   window.clearInterval(i);
-    // }
-    clearInterval(this.timerID);
-    this.timerID = setInterval(
+    clearInterval(this.tickID);
+    this.tickID = setInterval(
       () => this.gameInterval(),
-      this.state.gameTick
+      this.state.gameTickLvlUp
     );
   };
 
-  stopInterval = () => {
-    clearInterval(this.timerID);
+  stopGame = () => {
+    clearInterval(this.tickID);
+    this.setState({
+      endOfGame: true,
+    })
   };
+
+  startAgain = () => {
+    this.setState({
+      gameScore: 0,
+      molePosition: {},
+      nextLevel: false,
+      endOfGame: false,
+    },
+      this.startGame()
+    )
+  }
 
   gameInterval = () => {
     this.setState({
@@ -60,10 +80,9 @@ class App extends React.Component {
     if (this.state.gameScore >= 9 && this.state.nextLevel === false) {
       this.setState({
         nextLevel: true,
-        gameTick: 500,
       },
         this.startNextInterval()
-      )
+      );
     }
   };
 
@@ -71,27 +90,38 @@ class App extends React.Component {
 
     return (
       <div>
-        <Grid container spacing={24}>
-          {
-            this.state.gameArray.map((row, indexX) =>
-              row.map((cell, indexY) => {
-                return (
-                  <Grid
-                    item
-                    xs={2}
-                    key={indexX + indexY}
-                    onClick={() => this.onClickCellHandler(indexX, indexY)}
-                  >
-                    {
-                      indexX === this.state.molePosition.x && indexY === this.state.molePosition.y ?
-                        <Paper className={'mole-cell'}>mole in a cell</Paper>
-                        : <Paper className={'empty-cell'}>empty cell</Paper>
-                    }
-                  </Grid>
-                )
-              }))
-          }
-        </Grid>
+        {
+          this.state.endOfGame ?
+            <div
+              className="modal-window"
+              onClick={this.startAgain}
+            >
+              Koniec Gry!
+              Twój wynik to: {this.state.gameScore}
+            </div>
+            :
+            <Grid container spacing={24}>
+              {
+                this.state.gameArray.map((row, indexX) =>
+                  row.map((cell, indexY) => {
+                    return (
+                      <Grid
+                        item
+                        xs={2}
+                        key={indexX + indexY}
+                        onClick={() => this.onClickCellHandler(indexX, indexY)}
+                      >
+                        {
+                          indexX === this.state.molePosition.x && indexY === this.state.molePosition.y ?
+                            <Paper><div className="mole-cell">BLACK MOLE</div></Paper>
+                            : <Paper><div className="empty-cell">grass</div></Paper>
+                        }
+                      </Grid>
+                    )
+                  }))
+              }
+            </Grid>
+        }
       </div >
     )
   }
