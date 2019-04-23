@@ -33,7 +33,7 @@ class App extends React.Component {
   };
 
   componentWillUnmount = () => {
-    clearInterval(this.tickID);
+    this.stopGame();
   };
 
   startNextInterval = () => {
@@ -75,7 +75,9 @@ class App extends React.Component {
     if (indexX === this.state.molePosition.x && indexY === this.state.molePosition.y) {
       this.setState({
         gameScore: this.state.gameScore + 1,
-      })
+      },
+        this.gameInterval()
+      )
     };
     if (this.state.gameScore >= 9 && this.state.nextLevel === false) {
       this.setState({
@@ -96,32 +98,33 @@ class App extends React.Component {
               className="modal-window"
               onClick={this.startAgain}
             >
-              Koniec Gry!
-              Twój wynik to: {this.state.gameScore}
+              <h1>Koniec Gry!</h1>
+              <h2>Twój wynik to: {this.state.gameScore}</h2>
+              <p>kliknij by zacząć od nowa</p>
             </div>
-            :
-            <Grid container spacing={24}>
-              {
-                this.state.gameArray.map((row, indexX) =>
-                  row.map((cell, indexY) => {
-                    return (
-                      <Grid
-                        item
-                        xs={2}
-                        key={indexX + indexY}
-                        onClick={() => this.onClickCellHandler(indexX, indexY)}
-                      >
-                        {
-                          indexX === this.state.molePosition.x && indexY === this.state.molePosition.y ?
-                            <Paper><div className="mole-cell">BLACK MOLE</div></Paper>
-                            : <Paper><div className="empty-cell">grass</div></Paper>
-                        }
-                      </Grid>
-                    )
-                  }))
-              }
-            </Grid>
+            : null
         }
+        <Grid container spacing={24}>
+          {
+            this.state.gameArray.map((row, indexX) =>
+              row.map((cell, indexY) => {
+                return (
+                  <Grid
+                    item
+                    xs={2}
+                    key={indexX + indexY}
+                    onClick={() => this.onClickCellHandler(indexX, indexY)}
+                  >
+                    {
+                      indexX === this.state.molePosition.x && indexY === this.state.molePosition.y ?
+                        <Paper><div className="mole-cell">BLACK MOLE</div></Paper>
+                        : <Paper><div className="empty-cell">grass</div></Paper>
+                    }
+                  </Grid>
+                )
+              }))
+          }
+        </Grid>
       </div >
     )
   }
