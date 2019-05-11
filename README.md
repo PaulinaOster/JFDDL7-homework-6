@@ -1,12 +1,10 @@
 http://jfddl7-homework-6.surge.sh/
 
-## JFDDL7 course - homework#6
+## Gra Whack A Mole
 
-Gra Whack A Mole
- 
-Waszym zadaniem będzie stworzyć samodzielnie, korzystając z wiedzy z zajęć z JS, przetwarzania struktur danych Reacta, stworzyć bardzo prostą minigrę.
- 
-Aplikacja ma następujące wymagania:
+Minigra stworzona w React JS.
+
+### Funkcje gry:
  
 - generowanie kreta w losowym miejscu na polu gry raz na określony czas a następnie generowanie go w innym
 - kliknięcie kreta powoduje nabicie punktu i wygenerowanie go natychmiast w innym miejscu
@@ -14,7 +12,7 @@ Aplikacja ma następujące wymagania:
 - gra kończy się po 120 sekundach
 - na zakończenie wyświetlany jest uzyskany wynik w okienku modalnym
  
-Dodatkowo:
+### do zrobienia:
  
 - gra umożliwia zapisanie wyniku w bazie danych (REST API lub Firebase)
 - po zapisaniu wyników można podejrzeć ranking 3 najlepszych wyników
